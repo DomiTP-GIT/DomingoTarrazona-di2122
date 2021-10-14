@@ -4,6 +4,10 @@ Activitat 12 Modifica el codi de l’activitat 11 per a que no es produïsquen e
 per introdïur valor no definits per a lesfuncions, valors que no són numèrics o operacions desconegudes.
 Controla també que no es produïsquen errors en la lectura/escriptura dels arxius
 """
+import os
+
+operaciones = os.path.join(os.path.dirname(__file__), "operaciones.txt")
+resultado = os.path.join(os.path.dirname(__file__), "resultados.txt")
 
 suma = lambda n1, n2: n1 + n2
 resta = lambda n1, n2: n1 - n2
@@ -42,7 +46,7 @@ def leer(archivo):
 
 def saveFile(lineas):
 	try:
-		with open("resultados.txt", 'w') as fi:
+		with open(resultado, 'w') as fi:
 			fi.writelines(lineas)
 	except (FileNotFoundError, IOError):
 		print("Error con los ficheros")
@@ -50,4 +54,4 @@ def saveFile(lineas):
 		fi.close()
 
 
-leer("operaciones.txt")
+leer(operaciones)

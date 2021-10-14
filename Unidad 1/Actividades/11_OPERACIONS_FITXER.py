@@ -7,6 +7,11 @@ Haurà de generar: 4 + 4 = 8
 Utilitza funcions anònimes per a implementar les operacions.
 """
 
+import os
+
+operaciones = os.path.join(os.path.dirname(__file__), "operaciones.txt")
+resultado = os.path.join(os.path.dirname(__file__), "resultados.txt")
+
 suma = lambda n1, n2: n1 + n2
 resta = lambda n1, n2: n1 - n2
 multi = lambda n1, n2: n1 * n2
@@ -36,8 +41,8 @@ def leer(archivo):
 
 
 def saveFile(lineas):
-	with open("resultados.txt", 'w') as fi:
+	with open(resultado, 'w') as fi:
 		fi.writelines(lineas)
 
 
-leer("operaciones.txt")
+leer(operaciones)
