@@ -42,6 +42,8 @@ def leer(archivo):
 		print("Error en las operaciones")
 	except TypeError:
 		print("Error en el tipo")
+	except FileNotFoundError:
+		print("El archivo de operaciones no existe")
 
 
 def saveFile(lineas):
