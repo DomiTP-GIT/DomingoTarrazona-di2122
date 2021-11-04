@@ -14,15 +14,33 @@
     │   ├── 9_IMPRIMIR_LLISTA.py
     │   └── README.md
     └── Práctica 1
-        └── Práctica Obligatoria
+        ├── Práctica Obligatoria
+        │   ├── main.py
+        │   ├── requirements.txt
+        │   └── resources
+        │       └── ...
+        └── PyGame Amplicación
+            ├── cloud.py
+            ├── constantes.py
+            ├── database.py
+            ├── enemy.py
+            ├── extend_time.py
+            ├── heal.py
+            ├── level.py
             ├── main.py
-            └── resources
-                ├── Apoxode_-_Electric_1.ogg
-                ├── cloud.png
-                ├── Collision.ogg
-                ├── Falling_putter.ogg
-                ├── jet.png
-                ├── missile.png
-                └── Rising_putter.ogg
+            ├── pantalla_final.py
+            ├── pantalla_inicio.py
+            ├── player.py
+            ├── README.md
+            ├── requirements.txt
+            ├── resources
+            │   └── ...
+            ├── score.py
+            ├── shield.py
+            ├── shots.py
+            ├── sound.py
+            ├── speed.py
+            └── utils.py
+
 
 ```
