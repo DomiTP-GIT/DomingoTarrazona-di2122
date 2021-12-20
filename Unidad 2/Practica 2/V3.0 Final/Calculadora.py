@@ -5,7 +5,7 @@ import sys
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QKeySequence, QActionGroup, QIcon, QPixmap
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget, QLabel, QVBoxLayout, QGridLayout, \
-    QToolBar, QStackedLayout, QHBoxLayout, QMessageBox, QDialog, QDialogButtonBox
+    QToolBar, QStackedLayout, QHBoxLayout, QMessageBox, QDialog, QDialogButtonBox, QFileDialog
 
 
 class MainWindow(QMainWindow):
@@ -71,16 +71,27 @@ class MainWindow(QMainWindow):
         self.no_guardando = os.path.join(os.path.dirname(__file__), "img/no-guardando.png")
 
         # Acción de guardar, tiene un tooltip para que al pasar el ratón te muestre información.
-        self.guardar = QAction(QIcon(self.no_guardando), "&Guardar")
-        self.guardar.setToolTip("Guardar las operaciones en un archivo")
-        self.guardar.setShortcut(QKeySequence("Ctrl+S"))
-        self.guardar.setCheckable(True)
-        self.guardar.triggered.connect(self.change_guardar)
+        self.guardado = QAction(QIcon(self.no_guardando), "&Guardado")
+        self.guardado.setToolTip("Guardar las operaciones en un archivo")
+        self.guardado.setShortcut(QKeySequence("Ctrl+S"))
+        self.guardado.setCheckable(True)
+        self.guardado.triggered.connect(self.change_guardar)
+
+        # Acción para seleccionar donde se guardará el archivo
+        self.guardar = QAction(QIcon(os.path.join(os.path.dirname(__file__), "img/folders.png")), "&Ruta Guardado")
+        self.guardar.setShortcut(QKeySequence("Ctrl+G"))
+        self.guardar.setToolTip("Selecciona un archivo para guardar los resultados")
+        self.guardar.triggered.connect(self.seleccionar_ruta)
+
+        # Almacena la ruta de almacenado, por defecto crea un archivo en el mismo directorio llamado operaciones.txt
+        self.ruta = os.path.join(os.path.dirname(__file__), "operaciones.txt")
+        self.ruta_label = QLabel(self.ruta)
 
         # Añado la acción de guardar a la toolbar
-        toolbar.addAction(self.guardar)
+        toolbar.addAction(self.guardado)
 
         # Añado la acción de guardar al menú principal
+        main_menu.addAction(self.guardado)
         main_menu.addAction(self.guardar)
 
         # Añado un separador entre guardar y salir
@@ -93,6 +104,7 @@ class MainWindow(QMainWindow):
         self.mode_label = QLabel("Normal")
         self.mode_label.setAlignment(Qt.AlignCenter)
 
+        # Label que contiene una imagen, se situará en la toolbar y servirá para indicar el estado de guardado
         self.saving = QLabel()
         self.saving.setPixmap(QPixmap(self.no_guardando))
         self.saving.setAlignment(Qt.AlignCenter)
@@ -101,6 +113,7 @@ class MainWindow(QMainWindow):
         status = self.statusBar()
         status.addWidget(self.mode_label, 1)
         status.addWidget(self.saving, 1)
+        status.addWidget(self.ruta_label, 1)
 
         # Cuadro de texto principal donde se muestran las operaciones y resultados
         self.label = QLabel("0")
@@ -230,10 +243,9 @@ class MainWindow(QMainWindow):
                     self.label.setText(str(eval(text_in_label)))
 
                     # Si está seleccionada la parte de guardar, guarda la operación y el resultado en un fichero
-                    if self.guardar.isChecked():
-                        operaciones = os.path.join(os.path.dirname(__file__), "operaciones.txt")
+                    if self.guardado.isChecked():
                         try:
-                            with open(operaciones, 'a') as op:
+                            with open(self.ruta, 'a') as op:
                                 op.write(f'{text_in_label} = {self.label.text()}' + "\n")
                         except PermissionError as e:
                             # Creo un popup en caso de que no tenga permisos para modificar el fichero
@@ -316,12 +328,21 @@ class MainWindow(QMainWindow):
         """
         Cambia la imagen del statusbar y el icono
         """
-        if self.guardar.isChecked():
-            self.guardar.setIcon(QIcon(self.guardando))
+        if self.guardado.isChecked():
+            self.guardado.setIcon(QIcon(self.guardando))
             self.saving.setPixmap(QPixmap(self.guardando))
         else:
-            self.guardar.setIcon(QIcon(self.no_guardando))
+            self.guardado.setIcon(QIcon(self.no_guardando))
             self.saving.setPixmap(QPixmap(self.no_guardando))
+
+    def seleccionar_ruta(self):
+        """
+        Muestra un diálogo para seleccionar un archivo
+        """
+        nueva_ruta = QFileDialog.getOpenFileName(self, "Abrir Archivo", "", "Text Files (*.txt)")
+        if nueva_ruta:
+            self.ruta = nueva_ruta[0]
+            self.ruta_label.setText(self.ruta)
 
     def generar(self, num_col, texto_botones) -> QWidget:
         """
