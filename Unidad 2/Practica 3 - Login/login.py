@@ -1,6 +1,7 @@
 import sys
 
 from PySide6 import QtWidgets
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QWidget, QFormLayout, \
     QLineEdit
@@ -50,9 +51,9 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("PyLogin")
         self.login = None
-        label = QLabel(f"Sesión iniciada como {user}")
         status = self.statusBar()
-        status.addWidget(label)
+        status.addWidget(QLabel(f"Sesión iniciada como {user}"))
+        label = QLabel(f"Sesión iniciada como {user}")
         self.cerrar_sesion = QAction("&Cerrar sesión")
         self.salir = QAction("&Salir")
         self.cerrar_sesion.triggered.connect(self.cerrar)
